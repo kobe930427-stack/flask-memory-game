@@ -1,0 +1,274 @@
+/* ==========================================
+   全球基礎樣式與高質感背景
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f8fafc;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+/* 滿版響應式主容器 */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================
+   左側遊戲區與上方控制面板
+   ========================================== */
+.game-area {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.game-header h1 {
+    font-size: 2.2rem;
+    background: linear-gradient(to right, #38bdf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.control-panel {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+/* 高質感霓虹按鈕 */
+.btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #94a3b8;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #38bdf8;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.btn.active {
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+}
+
+/* 計時、計次面板 */
+.status-panel {
+    display: flex;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    width: fit-content;
+}
+
+.status-item {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.status-item span {
+    color: #38bdf8;
+}
+
+/* ==========================================
+   🎮 核心：動態卡片棋盤（Grid網格排版）
+   ========================================== */
+.game-board {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 保持棋盤絕對正方形 */
+    max-height: 550px;
+    margin: 0 auto;
+}
+
+/* 4x4 棋盤 */
+.grid-4x4 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+/* 6x6 棋盤 */
+.grid-6x6 {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 8px;
+}
+
+/* ==========================================
+   ✨ ✨ 核心：3D 卡片翻轉效果樣式
+   ========================================== */
+.memory-card {
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d; /* 啟動 3D 空間 */
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 當被加上 .is-flipped 類別時，整張卡片旋轉 180 度 */
+.memory-card.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* 翻到背面時隱藏另一面，關鍵！ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 卡片背面（蓋著的時候）：具備科技感的幾何圖形感 */
+.card-back {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #64748b;
+    font-size: 2rem;
+    box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.1);
+}
+
+.memory-card:hover .card-back {
+    border-color: #c084fc;
+    color: #c084fc;
+}
+
+/* 卡片正面（翻開時）：配對成功的明亮色彩 */
+.card-front {
+    background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
+    color: #fff;
+    font-size: 2.5rem;
+    transform: rotateY(180deg); /* 正面預先轉 180 度，蓋著時才看不到 */
+    border-color: #38bdf8;
+}
+
+/* 調整 6x6 難度下的卡片字體大小，避免爆字 */
+.grid-6x6 .card-back { font-size: 1.2rem; }
+.grid-6x6 .card-front { font-size: 1.8rem; }
+
+/* ==========================================
+   🏆 右側：毛玻璃殿堂英雄榜
+   ========================================== */
+.leaderboard-area {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-box {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-box h2 {
+    font-size: 1.3rem;
+    color: #fbbf24;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+
+.leaderboard-header {
+    display: grid;
+    grid-template-columns: 50px 1fr 70px 70px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.leaderboard-list {
+    list-style: none;
+    overflow-y: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* 排行榜每一列的效果 */
+.leaderboard-item {
+    display: grid;
+    grid-template-columns: 50px 1fr 70px 70px;
+    padding: 12px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.leaderboard-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+/* 前三名金銀銅特殊色 */
+.leaderboard-item:nth-child(1) .rank { color: #fbbf24; font-weight: 700; }
+.leaderboard-item:nth-child(2) .rank { color: #cbd5e1; font-weight: 700; }
+.leaderboard-item:nth-child(3) .rank { color: #b45309; font-weight: 700; }
+.leaderboard-item .rank { color: #64748b; }
+.leaderboard-item .name { color: #f1f5f9; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.leaderboard-item .time { color: #38bdf8; }
+.leaderboard-item .clicks { color: #c084fc; }
+
+/* ==========================================
+   📱 完美跨平台移動裝置響應式排版
+   ========================================== */
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    .leaderboard-box {
+        max-height: 350px;
+    }
+}
